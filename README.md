@@ -46,3 +46,42 @@ npm test
 | `APP_COLOR` | `blue` | Color del encabezado — útil para distinguir versiones en un despliegue. |
 | `SIMULATE_FAILURE` | `false` | Si es `true`, `/health` responde siempre `500`. |
 | `DB_PATH` | `./data/products.json` | Ruta del archivo de base de datos local. |
+
+
+# 📦 Inventario App - Microservicio & Pipeline CI/CD en Kubernetes
+
+Catálogo de inventario con interfaz web, base de datos local y API REST. Este proyecto cuenta con un entorno contenerizado en Docker, una canalización de Integración y Despliegue Continuos (CI/CD) completamente automatizada con GitHub Actions y un despliegue orquestado en Kubernetes (Minikube).
+
+---
+
+## 🛠️ Qué es y Tecnologías Utilizadas
+
+Una aplicación en Node.js/Express con:
+
+* **Interfaz web:** (`public/index.html`, `public/app.js`, `public/styles.css`): Tabla interactiva de productos con formularios para agregar y eliminar.
+* **Base de datos local:** (`db.js`): Archivo JSON en `data/products.json` que persiste datos entre reinicios sin dependencias externas.
+* **API REST:** Endpoints consumidos por la interfaz web y probes de Kubernetes.
+* **Contenedores & Orquestación:** Docker, Kubernetes (`kubectl`), Minikube.
+* **CI/CD & Registry:** GitHub Actions, GitHub Container Registry (GHCR).
+* **Pruebas y Seguridad:** Jest/Supertest para pruebas unitarias y Trivy Vulnerability Scanner para análisis de imágenes.
+
+---
+
+## 📁 Estructura del Proyecto
+
+```text
+INVENTARIO-APP/
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml         # Pipeline CI/CD de GitHub Actions
+├── k8s/
+│   ├── deployment.yaml       # Configuración de réplicas, estrategia RollingUpdate y Probes
+│   ├── secret.yaml           # Secretos y variables de entorno codificadas
+│   └── service.yaml          # Exposición del servicio mediante NodePort
+├── public/                   # Frontend estático (HTML, CSS, JS)
+├── data/                     # Persistencia de datos local (JSON)
+├── db.js                     # Controlador de base de datos
+├── server.js                 # Servidor Express y lógica de la API
+├── server.test.js            # Pruebas unitarias para CI
+├── Dockerfile                # Imagen multicapa optimizada para la app
+└── package.json              # Gestión de dependencias y scripts
