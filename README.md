@@ -85,3 +85,34 @@ INVENTARIO-APP/
 ├── server.test.js            # Pruebas unitarias para CI
 ├── Dockerfile                # Imagen multicapa optimizada para la app
 └── package.json              # Gestión de dependencias y scripts
+
+# 1. Iniciar el clúster local de Minikube
+minikube start
+
+# 2. Aplicar el manifiesto de Secretos (Variables de entorno)
+kubectl apply -f k8s/secret.yaml
+
+# 3. Aplicar el Deployment (Pods, Réplicas y Probes)
+kubectl apply -f k8s/deployment.yaml
+
+# 4. Aplicar el Servicio (NodePort)
+kubectl apply -f k8s/service.yaml
+
+# 5. Obtener la URL de acceso e iniciar el túnel hacia la app
+minikube service inventario-service
+
+# Verificar que los pods estén en estado Running y READY (1/1)
+kubectl get pods
+
+# Consultar el estado del servicio y puertos asignados
+kubectl get services
+
+# Simular una actualización/reinicio sin caída del servicio
+kubectl rollout restart deployment/inventario-deployment
+
+# Monitorear la sustitución progresiva de Pods en tiempo real
+kubectl get pods -w
+
+# Revisar el historial de despliegues (Rollout History)
+kubectl rollout history deployment/inventario-deployment
+
